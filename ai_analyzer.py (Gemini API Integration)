@@ -1,0 +1,33 @@
+import httpx
+
+GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+
+async def analyze_with_ai(sector: str, data: str):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+
+    prompt = f"""
+    Analyze the Indian {sector} sector using this data:
+
+    {data}
+
+    Provide:
+    - Market Overview
+    - Key Trends
+    - Trade Opportunities
+    - Risks
+    - Conclusion
+
+    Format in markdown.
+    """
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}]
+    }
+
+    async with httpx.AsyncClient() as client:
+        try:
+            res = await client.post(url, json=payload)
+            result = res.json()
+            return result["candidates"][0]["content"]["parts"][0]["text"]
+        except:
+            return "# Error\nUnable to generate analysis"
