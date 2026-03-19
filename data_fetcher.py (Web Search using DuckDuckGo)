@@ -1,0 +1,11 @@
+import httpx
+
+async def fetch_market_data(sector: str):
+    url = f"https://duckduckgo.com/?q={sector}+India+market+news&format=json"
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url)
+            return response.text[:1000]  # limit data
+        except:
+            return "No data found"
