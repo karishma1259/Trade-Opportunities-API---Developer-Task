@@ -1,0 +1,10 @@
+from fastapi import HTTPException
+
+VALID_SECTORS = ["pharmaceuticals", "technology", "agriculture", "banking", "energy"]
+
+def validate_sector(sector: str):
+    if sector.lower() not in VALID_SECTORS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid sector. Choose from {VALID_SECTORS}"
+        )
